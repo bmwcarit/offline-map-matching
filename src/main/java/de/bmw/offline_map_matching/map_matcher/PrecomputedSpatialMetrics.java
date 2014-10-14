@@ -24,8 +24,11 @@ import de.bmw.hmm.TimeStep;
 
 /**
  * Stores precomputed {@link SpatialMetrics}.
+ *
+ * @param <S> road position type, which corresponds to the HMM state.
+ * @param <O> location measurement type, which corresponds to the HMM observation.
  */
-public class PrecomputedSpatialMetrics implements SpatialMetrics {
+public class PrecomputedSpatialMetrics<S, O> implements SpatialMetrics<S, O> {
 
 
     /**
@@ -71,30 +74,26 @@ public class PrecomputedSpatialMetrics implements SpatialMetrics {
         }
     }
 
-    private final Map<RoadPosition, Double> gpsDistances = new HashMap<>();
-    private final Map<KeyPair<GpsMeasurement, GpsMeasurement>, Double> linearDistances =
+    private final Map<S, Double> measurementDistances = new HashMap<>();
+    private final Map<KeyPair<O, O>, Double> linearDistances =
             new HashMap<>();
-    private final Map<KeyPair<RoadPosition, RoadPosition>, Double> routeLengths = new HashMap<>();
+    private final Map<KeyPair<S, S>, Double> routeLengths = new HashMap<>();
 
     /**
      * Note that the passed road position must be the same instance passed to the HMM via
      * {@link TimeStep}s
      */
-    public void addGpsDistance(RoadPosition roadPosition, double gpsDistance) {
-        if (gpsDistances.containsKey(roadPosition)) {
+    public void addMeasurementDistance(S roadPosition, double measurementDistance) {
+        if (measurementDistances.containsKey(roadPosition)) {
             throw new IllegalArgumentException();
         }
 
-        gpsDistances.put(roadPosition, gpsDistance);
+        measurementDistances.put(roadPosition, measurementDistance);
     }
 
-    public void addLinearDistance(GpsMeasurement formerMeasurement,
-            GpsMeasurement laterMeasurement, double linearDistance) {
-        if (!formerMeasurement.time.before(laterMeasurement.time)) {
-            throw new IllegalArgumentException();
-        }
-
-        KeyPair<GpsMeasurement, GpsMeasurement> keyPair =
+    public void addLinearDistance(O formerMeasurement,
+            O laterMeasurement, double linearDistance) {
+        KeyPair<O, O> keyPair =
                 new KeyPair<>(formerMeasurement, laterMeasurement);
         if (linearDistances.containsKey(keyPair)) {
             throw new IllegalArgumentException();
@@ -105,18 +104,18 @@ public class PrecomputedSpatialMetrics implements SpatialMetrics {
     /**
      * @param routeLength Pass null if there is no route between both road positions.
      */
-    public void addRouteLength(RoadPosition sourcePosition, RoadPosition targetPosition,
+    public void addRouteLength(S sourcePosition, S targetPosition,
             Double routeLength) {
-        KeyPair<RoadPosition, RoadPosition> keyPair = new KeyPair<>(sourcePosition, targetPosition);
-        if (routeLengths.containsKey(keyPair)) {
+        KeyPair<S, S> keyPair = new KeyPair<>(sourcePosition, targetPosition);
+        if (linearDistances.containsKey(keyPair)) {
             throw new IllegalArgumentException();
         }
         routeLengths.put(keyPair, routeLength);
     }
 
     @Override
-    public double gpsDistance(RoadPosition roadPosition) {
-        Double result = gpsDistances.get(roadPosition);
+    public double measurementDistance(S roadPosition) {
+        Double result = measurementDistances.get(roadPosition);
         if (result == null) {
             throw new IllegalStateException();
         }
@@ -124,10 +123,7 @@ public class PrecomputedSpatialMetrics implements SpatialMetrics {
     }
 
     @Override
-    public double linearDistance(GpsMeasurement formerMeasurement, GpsMeasurement laterMeasurement) {
-        if (!formerMeasurement.time.before(laterMeasurement.time)) {
-            throw new IllegalArgumentException();
-        }
+    public double linearDistance(O formerMeasurement, O laterMeasurement) {
         Double result = linearDistances.get(new KeyPair<>(formerMeasurement, laterMeasurement));
         if (result == null) {
             throw new IllegalStateException();
@@ -139,7 +135,7 @@ public class PrecomputedSpatialMetrics implements SpatialMetrics {
      * Returns null if there is no route between both road positions.
      */
     @Override
-    public Double routeLength(RoadPosition sourcePosition, RoadPosition targetPosition) {
+    public Double routeLength(S sourcePosition, S targetPosition) {
         if (!routeLengths.containsKey(new KeyPair<>(sourcePosition, targetPosition))) {
             throw new IllegalStateException();
         }

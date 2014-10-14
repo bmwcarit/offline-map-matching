@@ -18,28 +18,32 @@
 package de.bmw.offline_map_matching.map_matcher;
 
 
+
 /**
  * Provides spatial metrics needed to compute emission and transition probabilities.
  * This interface decouples from the actual metric computation and allows to either
  * precompute metrics (possibly remotely, e.g. using PostGIS) or to compute the metrics on
  * demand with an appropriate spatial library.
+ *
+ * @param <S> road position type, which corresponds to the HMM state.
+ * @param <O> location measurement type, which corresponds to the HMM observation.
  */
-public interface SpatialMetrics {
+public interface SpatialMetrics<S, O> {
 
     /**
      * Returns the linear distance [m] between the specified road position and its corresponding
-     * GPS measurement.
+     * location measurement.
      */
-    public double gpsDistance(RoadPosition roadPosition);
+    public double measurementDistance(S roadPosition);
 
     /**
-     * Returns the linear distance [m] between the specified subsequent GPS measurements.
+     * Returns the linear distance [m] between the specified subsequent location measurements.
      */
-    public double linearDistance(GpsMeasurement formerMeasurement, GpsMeasurement laterMeasurement);
+    public double linearDistance(O formerMeasurement, O laterMeasurement);
 
     /**
      * Returns the length [m] of the shortest route between both specified road positions or
      * null if no route exists between the specified road positions.
      */
-    public Double routeLength(RoadPosition sourcePosition, RoadPosition targetPosition);
+    public Double routeLength(S sourcePosition, S targetPosition);
 }

@@ -25,14 +25,15 @@ import de.bmw.hmm.TimeStep;
 public class OfflineMapMatcher {
 
     /**
-     * Returns the map matched observations or null if there was an HMM break.
+     * Returns the most likely sequence of map matched location measurements or null if there was an
+     * HMM break.
      */
-    public static List<RoadPosition> mapMatchObservations(
-            List<TimeStep<RoadPosition, GpsMeasurement>> timeSteps,
-            SpatialMetrics spatialMetrics) {
-        MapMatchingHmmProbabilities probabilities = new MapMatchingHmmProbabilities(spatialMetrics);
+    public static <S, O> List<S> computeMostLikelySequence(List<TimeStep<S, O>> timeSteps,
+            TemporalMetrics<O> temporalMetrics, SpatialMetrics<S, O> spatialMetrics) {
+        MapMatchingHmmProbabilities<S, O> probabilities =
+                new MapMatchingHmmProbabilities<>(timeSteps, spatialMetrics, temporalMetrics);
 
-        List<RoadPosition> mapMatchedObservations =
+        List<S> mapMatchedObservations =
                 Hmm.computeMostLikelySequence(probabilities, timeSteps.iterator());
         if (mapMatchedObservations.size() < timeSteps.size()) {
             return null;

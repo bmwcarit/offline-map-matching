@@ -17,23 +17,38 @@
 
 package de.bmw.offline_map_matching.map_matcher;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.bmw.hmm.HmmProbabilities;
+import de.bmw.hmm.TimeStep;
+import de.bmw.offline_map_matching.default_types.RoadPosition;
 
 /**
  * Based on Newson, Paul, and John Krumm. "Hidden Markov map matching through noise and sparseness."
  * Proceedings of the 17th ACM SIGSPATIAL International Conference on Advances in Geographic
  * Information Systems. ACM, 2009.
+ *
+ * @param <S> road position type, which corresponds to the HMM state.
+ * @param <O> location measurement type, which corresponds to the HMM observation.
  */
-public class MapMatchingHmmProbabilities implements
-        HmmProbabilities<RoadPosition, GpsMeasurement> {
+public class MapMatchingHmmProbabilities<S, O> implements HmmProbabilities<S, O> {
 
     /**
-     * Standard deviation of the normal distribution used for modeling the GPS error taken from
-     * Newson, Krumm.
+     * Maps road positions to coordinate measurements. This is needed because the normalized
+     * transition metric uses distance between measurements.
      */
-    private final static double SIGMA_MEASUREMENT_PROBABILITY = 4.07;
+    private final Map<S, O> measurementMap = new HashMap<>();
+
+    private final SpatialMetrics<S, O> spatialMetrics;
+    private final TemporalMetrics<O> temporalMetrics;
+
+    /**
+     * Standard deviation of the normal distribution [m] used for modeling the GPS error taken from
+     * Newson&Krumm.
+     */
+    private final static double SIGMA = 4.07;
 
     /**
      * Beta parameter of the exponential distribution for modeling transition probabilities.
@@ -42,69 +57,76 @@ public class MapMatchingHmmProbabilities implements
      *
      * @see MapMatchingHmmProbabilities#normalizedTransitionMetric(RoadPosition, RoadPosition)
      */
-    private final static double BETA_TRANSITION_PROBABILITY = 0.00959442;
+    private final static double BETA = 0.00959442;
 
-    private final SpatialMetrics metrics;
-
-    public MapMatchingHmmProbabilities(SpatialMetrics metrics) {
-        if (metrics == null) {
+    public MapMatchingHmmProbabilities(List<TimeStep<S, O>> timeSteps,
+            SpatialMetrics<S, O> spatialMetrics, TemporalMetrics<O> temporalMetrics) {
+        if (timeSteps == null || spatialMetrics == null || temporalMetrics == null) {
             throw new NullPointerException();
         }
-        this.metrics = metrics;
+        for (TimeStep<S, O> timeStep : timeSteps) {
+            for (S candidate : timeStep.candidates) {
+                measurementMap.put(candidate, timeStep.observation);
+            }
+        }
+        this.spatialMetrics = spatialMetrics;
+        this.temporalMetrics = temporalMetrics;
     }
 
     /**
      * Returns the logarithmic emission probability density.
      */
     @Override
-    public double emissionLogProbability(RoadPosition roadPosition, GpsMeasurement measurement) {
-        return Math.log(Distributions.normalDistribution(SIGMA_MEASUREMENT_PROBABILITY,
-                metrics.gpsDistance(roadPosition)));
+    public double emissionLogProbability(S roadPosition, O measurement) {
+        return Math.log(Distributions.normalDistribution(
+                MapMatchingHmmProbabilities.SIGMA,
+                spatialMetrics.measurementDistance(roadPosition)));
     }
 
     /**
-     * Returns the logarithmic transition log probability density.
+     * Returns the logarithmic transition probability density.
      */
     @Override
-    public double transitionLogProbability(RoadPosition sourcePosition,
-            RoadPosition targetPosition) {
+    public double transitionLogProbability(S sourcePosition, S targetPosition) {
         Double transitionMetric = normalizedTransitionMetric(sourcePosition, targetPosition);
         if (transitionMetric == null) {
             return Double.NEGATIVE_INFINITY;
         } else {
             return Distributions.logExponentialDistribution(
-                    MapMatchingHmmProbabilities.BETA_TRANSITION_PROBABILITY, transitionMetric);
+                    MapMatchingHmmProbabilities.BETA, transitionMetric);
         }
     }
 
     /**
      * Returns |linearDistance - shortestRouteLength| / time_difference² in [m/s²], where
-     * linearDistance is the linear distance between the corresponding GPS measurements of
+     * linearDistance is the linear distance between the corresponding location measurements of
      * sourcePositon and targetPosition, shortestRouteLength is the shortest route length from
      * sourcePosition to targetPosition on the road network and timeDifference is the time
-     * difference between the corresponding GPS measurements ofsourcePosition and targetPosition.
+     * difference between the corresponding location measurements of sourcePosition and
+     * targetPosition.
+     *
+     * Returns null if there is no route between sourcePosition and targetPosition.
      *
      * In contrast to Newson & Krumm the absolute distance difference is divided by the quadratic
      * time difference to make the beta parameter of the exponential distribution independent of the
      * sampling interval.
      */
-    public Double normalizedTransitionMetric(RoadPosition sourcePosition,
-            RoadPosition targetPosition) {
-        final Date sourceTime = sourcePosition.gpsMeasurement.time;
-        final Date targetTime = targetPosition.gpsMeasurement.time;
-        if (!sourceTime.before(targetTime)) {
+    public Double normalizedTransitionMetric(S sourcePosition, S targetPosition) {
+        final O sourceMeasurement = measurementMap.get(sourcePosition);
+        final O targetMeasurement = measurementMap.get(targetPosition);
+        final double timeDiff = temporalMetrics.timeDifference(sourceMeasurement, targetMeasurement);
+        if (timeDiff < 0.0) {
             throw new IllegalStateException(
-                    "Time difference between subsequent GPS measurements must be >= 0.");
+                    "Time difference between subsequent location measurements must be >= 0.");
         }
 
-        final double linearDistance = metrics.linearDistance(sourcePosition.gpsMeasurement,
-                targetPosition.gpsMeasurement);
-        final Double routeLength = metrics.routeLength(sourcePosition, targetPosition);
+        final double linearDistance = spatialMetrics.linearDistance(sourceMeasurement,
+                targetMeasurement);
+        final Double routeLength = spatialMetrics.routeLength(sourcePosition, targetPosition);
         if (routeLength == null) {
             return null;
         } else {
-            double timeDifferenceS = (targetTime.getTime() - sourceTime.getTime()) / 1000.0;
-            return Math.abs(linearDistance - routeLength) / (timeDifferenceS * timeDifferenceS);
+            return Math.abs(linearDistance - routeLength) / (timeDiff * timeDiff);
         }
     }
 
