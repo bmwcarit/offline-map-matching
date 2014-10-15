@@ -20,6 +20,7 @@ package de.bmw.offline_map_matching.map_matcher;
 import java.util.List;
 
 import de.bmw.hmm.Hmm;
+import de.bmw.hmm.MostLikelySequence;
 import de.bmw.hmm.TimeStep;
 
 public class OfflineMapMatcher {
@@ -28,18 +29,12 @@ public class OfflineMapMatcher {
      * Returns the most likely sequence of map matched location measurements or null if there was an
      * HMM break.
      */
-    public static <S, O> List<S> computeMostLikelySequence(List<TimeStep<S, O>> timeSteps,
-            TemporalMetrics<O> temporalMetrics, SpatialMetrics<S, O> spatialMetrics) {
+    public static <S, O> MostLikelySequence<S, O> computeMostLikelySequence(
+            List<TimeStep<S, O>> timeSteps, TemporalMetrics<O> temporalMetrics,
+            SpatialMetrics<S, O> spatialMetrics) {
         MapMatchingHmmProbabilities<S, O> probabilities =
                 new MapMatchingHmmProbabilities<>(timeSteps, spatialMetrics, temporalMetrics);
-
-        List<S> mapMatchedObservations =
-                Hmm.computeMostLikelySequence(probabilities, timeSteps.iterator());
-        if (mapMatchedObservations.size() < timeSteps.size()) {
-            return null;
-        } else {
-            return mapMatchedObservations;
-        }
+        return Hmm.computeMostLikelySequence(probabilities, timeSteps.iterator());
     }
 
 }

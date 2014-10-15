@@ -18,6 +18,7 @@
 package de.bmw.offline_map_matching.map_matcher;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import de.bmw.hmm.MostLikelySequence;
 import de.bmw.hmm.TimeStep;
 import de.bmw.offline_map_matching.default_types.DefaultTemporalMetrics;
 import de.bmw.offline_map_matching.default_types.GpsMeasurement;
@@ -105,7 +107,7 @@ public class OfflineMapMatcherTest {
         spatialMetrics.addRouteLength(rp33, rp42, 30.0);
 
         List<RoadPosition> roadPositions = OfflineMapMatcher.computeMostLikelySequence(timeSteps,
-                new DefaultTemporalMetrics(), spatialMetrics);
+                new DefaultTemporalMetrics(), spatialMetrics).sequence;
         assertEquals(Arrays.asList(rp11, rp21, rp31, rp41), roadPositions);
     }
 
@@ -116,11 +118,11 @@ public class OfflineMapMatcherTest {
         GpsMeasurement gps1 = new GpsMeasurement(seconds(0), 10, 10);
         timeSteps.add( new TimeStep<RoadPosition, GpsMeasurement>(gps1) );
 
-        List<RoadPosition> roadPositions = OfflineMapMatcher.computeMostLikelySequence(timeSteps,
+        MostLikelySequence<RoadPosition, GpsMeasurement> mls =
+                OfflineMapMatcher.computeMostLikelySequence(timeSteps,
                 new DefaultTemporalMetrics(),
                 new PrecomputedSpatialMetrics<RoadPosition, GpsMeasurement>());
-        assertEquals(null, roadPositions);
-
+        assertTrue(mls.isBroken);
     }
 
 
