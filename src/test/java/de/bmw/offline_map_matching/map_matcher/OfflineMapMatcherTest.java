@@ -73,15 +73,15 @@ public class OfflineMapMatcherTest {
 
         final PrecomputedSpatialMetrics<RoadPosition, GpsMeasurement> spatialMetrics =
                 new PrecomputedSpatialMetrics<>();
-        spatialMetrics.addMeasurementDistance(rp11, 10.0);
-        spatialMetrics.addMeasurementDistance(rp12, 50.0);
-        spatialMetrics.addMeasurementDistance(rp21, 10.0);
-        spatialMetrics.addMeasurementDistance(rp22, 30.0);
-        spatialMetrics.addMeasurementDistance(rp31, 10.0);
-        spatialMetrics.addMeasurementDistance(rp32, 10.0);
-        spatialMetrics.addMeasurementDistance(rp33, 30.0);
-        spatialMetrics.addMeasurementDistance(rp41, 10.0);
-        spatialMetrics.addMeasurementDistance(rp42, 50.0);
+        spatialMetrics.addMeasurementDistance(rp11, gps1, 10.0);
+        spatialMetrics.addMeasurementDistance(rp12, gps1, 50.0);
+        spatialMetrics.addMeasurementDistance(rp21, gps2, 10.0);
+        spatialMetrics.addMeasurementDistance(rp22, gps2, 30.0);
+        spatialMetrics.addMeasurementDistance(rp31, gps3, 10.0);
+        spatialMetrics.addMeasurementDistance(rp32, gps3, 10.0);
+        spatialMetrics.addMeasurementDistance(rp33, gps3, 30.0);
+        spatialMetrics.addMeasurementDistance(rp41, gps4, 10.0);
+        spatialMetrics.addMeasurementDistance(rp42, gps4, 50.0);
 
         spatialMetrics.addLinearDistance(gps1, gps2, distance(20, 10));
         spatialMetrics.addLinearDistance(gps2, gps3, 20);

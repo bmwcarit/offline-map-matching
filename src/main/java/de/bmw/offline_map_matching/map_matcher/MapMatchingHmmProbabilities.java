@@ -80,7 +80,7 @@ public class MapMatchingHmmProbabilities<S, O> implements HmmProbabilities<S, O>
     public double emissionLogProbability(S roadPosition, O measurement) {
         return Math.log(Distributions.normalDistribution(
                 MapMatchingHmmProbabilities.SIGMA,
-                spatialMetrics.measurementDistance(roadPosition)));
+                spatialMetrics.measurementDistance(roadPosition, measurement)));
     }
 
     /**

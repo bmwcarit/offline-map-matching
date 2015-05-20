@@ -31,10 +31,10 @@ package de.bmw.offline_map_matching.map_matcher;
 public interface SpatialMetrics<S, O> {
 
     /**
-     * Returns the linear distance [m] between the specified road position and its corresponding
-     * location measurement.
+     * Returns the linear distance [m] between the specified location measurement and the specified
+     * road position.
      */
-    public double measurementDistance(S roadPosition);
+    public double measurementDistance(S roadPosition, O measurement);
 
     /**
      * Returns the linear distance [m] between the specified subsequent location measurements.

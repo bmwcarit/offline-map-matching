@@ -74,21 +74,26 @@ public class PrecomputedSpatialMetrics<S, O> implements SpatialMetrics<S, O> {
         }
     }
 
-    private final Map<S, Double> measurementDistances = new HashMap<>();
+    private final Map<KeyPair<O, S>, Double> measurementDistances = new HashMap<>();
     private final Map<KeyPair<O, O>, Double> linearDistances =
             new HashMap<>();
     private final Map<KeyPair<S, S>, Double> routeLengths = new HashMap<>();
 
     /**
+     * Adds the specified measurement distance between the specified road position and the
+     * specified location measurement.
+     *
      * Note that the passed road position must be the same instance passed to the HMM via
      * {@link TimeStep}s
      */
-    public void addMeasurementDistance(S roadPosition, double measurementDistance) {
-        if (measurementDistances.containsKey(roadPosition)) {
+    public void addMeasurementDistance(S roadPosition, O locationMeasurement,
+            double measurementDistance) {
+        KeyPair<O, S> keyPair = new KeyPair<>(locationMeasurement, roadPosition);
+        if (measurementDistances.containsKey(keyPair)) {
             throw new IllegalArgumentException();
         }
 
-        measurementDistances.put(roadPosition, measurementDistance);
+        measurementDistances.put(keyPair, measurementDistance);
     }
 
     public void addLinearDistance(O formerMeasurement,
@@ -114,8 +119,8 @@ public class PrecomputedSpatialMetrics<S, O> implements SpatialMetrics<S, O> {
     }
 
     @Override
-    public double measurementDistance(S roadPosition) {
-        Double result = measurementDistances.get(roadPosition);
+    public double measurementDistance(S roadPosition, O measurement) {
+        Double result = measurementDistances.get(new KeyPair<>(measurement, roadPosition));
         if (result == null) {
             throw new IllegalStateException();
         }
