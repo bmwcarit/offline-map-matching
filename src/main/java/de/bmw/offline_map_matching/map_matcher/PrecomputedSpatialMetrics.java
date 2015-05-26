@@ -112,7 +112,7 @@ public class PrecomputedSpatialMetrics<S, O> implements SpatialMetrics<S, O> {
     public void addRouteLength(S sourcePosition, S targetPosition,
             Double routeLength) {
         KeyPair<S, S> keyPair = new KeyPair<>(sourcePosition, targetPosition);
-        if (linearDistances.containsKey(keyPair)) {
+        if (routeLengths.containsKey(keyPair)) {
             throw new IllegalArgumentException();
         }
         routeLengths.put(keyPair, routeLength);
