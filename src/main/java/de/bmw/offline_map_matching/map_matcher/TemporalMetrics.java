@@ -17,7 +17,6 @@
 
 package de.bmw.offline_map_matching.map_matcher;
 
-import de.bmw.offline_map_matching.default_types.RoadPosition;
 
 
 /**
@@ -32,7 +31,7 @@ public interface TemporalMetrics<O> {
      * The time difference is positive if m2 is later than m1 and negative if m1 is later than m2.
      *
      * This is needed to compute the normalized transition metric defined in
-     * {@link MapMatchingHmmProbabilities#normalizedTransitionMetric(RoadPosition, RoadPosition)}.
+     * {@link MapMatchingHmmProbabilities#normalizedTransitionMetric(Object, Object)}.
      */
     public double timeDifference(O m1, O m2);
 }
