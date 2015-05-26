@@ -32,6 +32,7 @@ import org.junit.Test;
 import de.bmw.hmm.MostLikelySequence;
 import de.bmw.hmm.TimeStep;
 import de.bmw.offline_map_matching.default_types.DefaultTemporalMetrics;
+import de.bmw.offline_map_matching.default_types.EuclideanSpatialMetrics;
 import de.bmw.offline_map_matching.default_types.GpsMeasurement;
 import de.bmw.offline_map_matching.default_types.RoadPosition;
 
@@ -51,7 +52,7 @@ public class OfflineMapMatcherTest {
          *  when debugging.
          */
         GpsMeasurement gps1 = new GpsMeasurement(seconds(0), 10, 10);
-        RoadPosition rp11 = new RoadPosition(1, 1.0 / 5.0, 10.0, 10.0);
+        RoadPosition rp11 = new RoadPosition(1, 1.0 / 5.0, 20.0, 10.0);
         RoadPosition rp12 = new RoadPosition(2, 1.0 / 5.0, 60.0, 10.0);
         timeSteps.add( new TimeStep<>(gps1, rp11, rp12) );
 
@@ -71,22 +72,7 @@ public class OfflineMapMatcherTest {
         RoadPosition rp42 = new RoadPosition(5, 2.0 / 3.0, 60.0, 70.0);
         timeSteps.add( new TimeStep<>(gps4, rp41, rp42) );
 
-        final PrecomputedSpatialMetrics<RoadPosition, GpsMeasurement> spatialMetrics =
-                new PrecomputedSpatialMetrics<>();
-        spatialMetrics.addMeasurementDistance(rp11, gps1, 10.0);
-        spatialMetrics.addMeasurementDistance(rp12, gps1, 50.0);
-        spatialMetrics.addMeasurementDistance(rp21, gps2, 10.0);
-        spatialMetrics.addMeasurementDistance(rp22, gps2, 30.0);
-        spatialMetrics.addMeasurementDistance(rp31, gps3, 10.0);
-        spatialMetrics.addMeasurementDistance(rp32, gps3, 10.0);
-        spatialMetrics.addMeasurementDistance(rp33, gps3, 30.0);
-        spatialMetrics.addMeasurementDistance(rp41, gps4, 10.0);
-        spatialMetrics.addMeasurementDistance(rp42, gps4, 50.0);
-
-        spatialMetrics.addLinearDistance(gps1, gps2, distance(20, 10));
-        spatialMetrics.addLinearDistance(gps2, gps3, 20);
-        spatialMetrics.addLinearDistance(gps3, gps4, distance(20, 30));
-
+        final EuclideanSpatialMetrics spatialMetrics = new EuclideanSpatialMetrics();
         spatialMetrics.addRouteLength(rp11, rp21, 10.0);
         spatialMetrics.addRouteLength(rp11, rp22, 110.0);
         spatialMetrics.addRouteLength(rp12, rp21, 110.0);
@@ -130,10 +116,6 @@ public class OfflineMapMatcherTest {
         Calendar c = new GregorianCalendar(2014, 1, 1);
         c.add(Calendar.SECOND, seconds);
         return c.getTime();
-    }
-
-    private double distance(double deltaX, double deltaY) {
-        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
 }
