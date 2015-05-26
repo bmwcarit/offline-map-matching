@@ -40,9 +40,9 @@ public class OfflineMapMatcherTest {
 
     @Test
     /**
-     * The test scenario is depicted in ./OfflineMapMatcherTest.png. GPS measurements are indicated
-     * with diagonal crosses whereas matching candidates are marked on the road segments.
-     * All road segments can be driven in both directions.
+     * The test scenario is depicted in ./OfflineMapMatcherTest.png.
+     * All road segments can be driven in both directions. The orientation of road segments
+     * is needed to determine the fractions of a road positions.
      */
     public void testMapMatching() {
         List<TimeStep<RoadPosition, GpsMeasurement>> timeSteps = new ArrayList<>();
