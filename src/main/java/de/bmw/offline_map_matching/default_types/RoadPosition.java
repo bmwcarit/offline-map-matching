@@ -35,14 +35,26 @@ public class RoadPosition {
      */
     public final double fraction;
 
-    public RoadPosition(long edgeId, double fraction) {
+    public final Point position;
+
+    public RoadPosition(long edgeId, double fraction, Point position) {
+        if (fraction < 0.0 || fraction > 1.0) {
+            throw new IllegalArgumentException();
+        }
+
         this.edgeId = edgeId;
         this.fraction = fraction;
+        this.position = position;
+    }
+
+    public RoadPosition(long edgeId, double fraction, double x, double y) {
+        this(edgeId, fraction, new Point(x, y));
     }
 
     @Override
     public String toString() {
-        return "RoadPosition [edgeId=" + edgeId + ", fraction=" + fraction + "]";
+        return "RoadPosition [edgeId=" + edgeId + ", fraction=" + fraction
+                + ", position=" + position + "]";
     }
 
 }

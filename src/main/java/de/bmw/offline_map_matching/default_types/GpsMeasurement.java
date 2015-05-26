@@ -26,26 +26,20 @@ import java.util.Date;
 public class GpsMeasurement {
 
     public final Date time;
+    public Point position;
 
-    /**
-     * Longitude in degrees.
-     */
-    public final double lon;
-
-    /**
-     * Latitude in degrees.
-     */
-    public final double lat;
+    public GpsMeasurement(Date time, Point position) {
+        this.time = time;
+        this.position = position;
+    }
 
     public GpsMeasurement(Date time, double lon, double lat) {
-        this.time = time;
-        this.lon = lon;
-        this.lat = lat;
+        this(time, new Point(lon, lat));
     }
 
     @Override
     public String toString() {
-        return "GpsMeasurement [time=" + time + ", lon=" + lon + ", lat=" + lat + "]";
+        return "GpsMeasurement [time=" + time + ", position=" + position + "]";
     }
 
 }

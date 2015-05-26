@@ -51,24 +51,24 @@ public class OfflineMapMatcherTest {
          *  when debugging.
          */
         GpsMeasurement gps1 = new GpsMeasurement(seconds(0), 10, 10);
-        RoadPosition rp11 = new RoadPosition(1, 1);
-        RoadPosition rp12 = new RoadPosition(1, 2);
+        RoadPosition rp11 = new RoadPosition(1, 1.0 / 5.0, 10.0, 10.0);
+        RoadPosition rp12 = new RoadPosition(2, 1.0 / 5.0, 60.0, 10.0);
         timeSteps.add( new TimeStep<>(gps1, rp11, rp12) );
 
         GpsMeasurement gps2 = new GpsMeasurement(seconds(1), 30, 20);
-        RoadPosition rp21 = new RoadPosition(2, 1);
-        RoadPosition rp22 = new RoadPosition(2, 2);
+        RoadPosition rp21 = new RoadPosition(1, 2.0 / 5.0, 20.0, 20.0);
+        RoadPosition rp22 = new RoadPosition(2, 2.0 / 5.0, 60.0, 20.0);
         timeSteps.add( new TimeStep<>(gps2, rp21, rp22) );
 
         GpsMeasurement gps3 = new GpsMeasurement(seconds(2), 30, 40);
-        RoadPosition rp31 = new RoadPosition(3, 1);
-        RoadPosition rp32 = new RoadPosition(3, 2);
-        RoadPosition rp33 = new RoadPosition(3, 3);
+        RoadPosition rp31 = new RoadPosition(1, 5.0 / 6.0, 20.0, 40.0);
+        RoadPosition rp32 = new RoadPosition(3, 1.0 / 4.0, 30.0, 50.0);
+        RoadPosition rp33 = new RoadPosition(2, 5.0 / 6.0, 60.0, 40.0);
         timeSteps.add( new TimeStep<>(gps3, rp31, rp32, rp33) );
 
         GpsMeasurement gps4 = new GpsMeasurement(seconds(3), 10, 70);
-        RoadPosition rp41 = new RoadPosition(4, 1);
-        RoadPosition rp42 = new RoadPosition(4, 2);
+        RoadPosition rp41 = new RoadPosition(4, 2.0 / 3.0, 20.0, 70.0);
+        RoadPosition rp42 = new RoadPosition(5, 2.0 / 3.0, 60.0, 70.0);
         timeSteps.add( new TimeStep<>(gps4, rp41, rp42) );
 
         final PrecomputedSpatialMetrics<RoadPosition, GpsMeasurement> spatialMetrics =
