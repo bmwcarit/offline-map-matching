@@ -15,20 +15,21 @@
  * limitations under the License.
  */
 
-package de.bmw.offline_map_matching.map_matcher;
+package com.bmw.offline_map_matching.default_types;
 
-import static org.junit.Assert.assertEquals;
+import com.bmw.offline_map_matching.map_matcher.TemporalMetrics;
 
-import org.junit.Test;
+/**
+ * Implements the temporal metrics for the default spatial types defined in this package.
+  */
+public class DefaultTemporalMetrics implements TemporalMetrics<GpsMeasurement> {
 
-public class DistributionsTest {
-
-    private static double DELTA = 1e-8;
-
-    @Test
-    public void testLogExponentialDistribution() {
-        assertEquals(Math.log(Distributions.exponentialDistribution(5, 6)),
-                Distributions.logExponentialDistribution(5, 6), DELTA);
+    /**
+     * @see TemporalMetrics#timeDifference(Object, Object)
+     */
+    @Override
+    public double timeDifference(GpsMeasurement m1, GpsMeasurement m2) {
+        return (m2.time.getTime() - m1.time.getTime()) / 1000.0;
     }
 
 }

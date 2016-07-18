@@ -18,7 +18,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
  ~ limitations under the License.
   -->
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.bmw.offline_map_matching</groupId>
+  <groupId>com.bmw.offline_map_matching</groupId>
   <artifactId>offline_map_matching</artifactId>
   <version>0.2.0</version>
   <packaging>jar</packaging>

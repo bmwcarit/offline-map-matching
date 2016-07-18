@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-package de.bmw.offline_map_matching.map_matcher;
+package com.bmw.offline_map_matching.map_matcher;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bmw.offline_map_matching.default_types.RoadPosition;
+
 import de.bmw.hmm.HmmProbabilities;
 import de.bmw.hmm.TimeStep;
-import de.bmw.offline_map_matching.default_types.RoadPosition;
 
 /**
  * Based on Newson, Paul, and John Krumm. "Hidden Markov map matching through noise and sparseness."

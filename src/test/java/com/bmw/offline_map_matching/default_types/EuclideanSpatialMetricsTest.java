@@ -1,10 +1,13 @@
-package de.bmw.offline_map_matching.default_types;
+package com.bmw.offline_map_matching.default_types;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
 import org.junit.Test;
+
+import com.bmw.offline_map_matching.default_types.EuclideanSpatialMetrics;
+import com.bmw.offline_map_matching.default_types.GpsMeasurement;
 
 public class EuclideanSpatialMetricsTest {
 

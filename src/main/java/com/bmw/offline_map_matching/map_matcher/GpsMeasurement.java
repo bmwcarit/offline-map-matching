@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.bmw.offline_map_matching.map_matcher;
+package com.bmw.offline_map_matching.map_matcher;
 
 import java.util.Date;
 

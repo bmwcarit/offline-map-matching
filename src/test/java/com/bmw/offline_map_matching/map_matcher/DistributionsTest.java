@@ -15,31 +15,22 @@
  * limitations under the License.
  */
 
-package de.bmw.offline_map_matching.default_types;
+package com.bmw.offline_map_matching.map_matcher;
 
-import java.util.Date;
+import static org.junit.Assert.assertEquals;
 
-/**
- * Default type for location coordinates. It is also possible to use a custom location class
- * instead.
- */
-public class GpsMeasurement {
+import org.junit.Test;
 
-    public final Date time;
-    public Point position;
+import com.bmw.offline_map_matching.map_matcher.Distributions;
 
-    public GpsMeasurement(Date time, Point position) {
-        this.time = time;
-        this.position = position;
-    }
+public class DistributionsTest {
 
-    public GpsMeasurement(Date time, double lon, double lat) {
-        this(time, new Point(lon, lat));
-    }
+    private static double DELTA = 1e-8;
 
-    @Override
-    public String toString() {
-        return "GpsMeasurement [time=" + time + ", position=" + position + "]";
+    @Test
+    public void testLogExponentialDistribution() {
+        assertEquals(Math.log(Distributions.exponentialDistribution(5, 6)),
+                Distributions.logExponentialDistribution(5, 6), DELTA);
     }
 
 }

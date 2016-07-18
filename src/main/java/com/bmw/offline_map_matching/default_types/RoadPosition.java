@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.bmw.offline_map_matching.default_types;
+package com.bmw.offline_map_matching.default_types;
 
 
 

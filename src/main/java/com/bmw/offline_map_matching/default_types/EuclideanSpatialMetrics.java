@@ -1,6 +1,6 @@
-package de.bmw.offline_map_matching.default_types;
+package com.bmw.offline_map_matching.default_types;
 
-import de.bmw.offline_map_matching.map_matcher.PrecomputedSpatialMetrics;
+import com.bmw.offline_map_matching.map_matcher.PrecomputedSpatialMetrics;
 
 /**
  * Computes distances between GPS locations with Euclidean geometry.

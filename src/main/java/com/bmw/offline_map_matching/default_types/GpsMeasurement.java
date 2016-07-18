@@ -15,21 +15,31 @@
  * limitations under the License.
  */
 
-package de.bmw.offline_map_matching.default_types;
+package com.bmw.offline_map_matching.default_types;
 
-import de.bmw.offline_map_matching.map_matcher.TemporalMetrics;
+import java.util.Date;
 
 /**
- * Implements the temporal metrics for the default spatial types defined in this package.
-  */
-public class DefaultTemporalMetrics implements TemporalMetrics<GpsMeasurement> {
+ * Default type for location coordinates. It is also possible to use a custom location class
+ * instead.
+ */
+public class GpsMeasurement {
 
-    /**
-     * @see TemporalMetrics#timeDifference(Object, Object)
-     */
+    public final Date time;
+    public Point position;
+
+    public GpsMeasurement(Date time, Point position) {
+        this.time = time;
+        this.position = position;
+    }
+
+    public GpsMeasurement(Date time, double lon, double lat) {
+        this(time, new Point(lon, lat));
+    }
+
     @Override
-    public double timeDifference(GpsMeasurement m1, GpsMeasurement m2) {
-        return (m2.time.getTime() - m1.time.getTime()) / 1000.0;
+    public String toString() {
+        return "GpsMeasurement [time=" + time + ", position=" + position + "]";
     }
 
 }
