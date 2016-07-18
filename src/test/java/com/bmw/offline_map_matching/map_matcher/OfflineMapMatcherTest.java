@@ -49,10 +49,6 @@ public class OfflineMapMatcherTest {
     public void testMapMatching() {
         List<TimeStep<RoadPosition, GpsMeasurement>> timeSteps = new ArrayList<>();
 
-        /*
-         *  Edge id and fraction of road position denotes their indexes to easily identify them
-         *  when debugging.
-         */
         GpsMeasurement gps1 = new GpsMeasurement(seconds(0), 10, 10);
         RoadPosition rp11 = new RoadPosition(1, 1.0 / 5.0, 20.0, 10.0);
         RoadPosition rp12 = new RoadPosition(2, 1.0 / 5.0, 60.0, 10.0);
