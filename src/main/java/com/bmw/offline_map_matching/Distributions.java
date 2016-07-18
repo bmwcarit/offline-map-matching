@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching.map_matcher;
+package com.bmw.offline_map_matching;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.exp;

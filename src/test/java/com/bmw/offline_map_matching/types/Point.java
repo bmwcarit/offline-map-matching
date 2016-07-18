@@ -15,22 +15,23 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching.map_matcher;
+package com.bmw.offline_map_matching.types;
 
-import static org.junit.Assert.assertEquals;
+/**
+ * Represents a spatial point.
+ */
+public class Point {
 
-import org.junit.Test;
+    final public double x;
+    final public double y;
 
-import com.bmw.offline_map_matching.map_matcher.Distributions;
-
-public class DistributionsTest {
-
-    private static double DELTA = 1e-8;
-
-    @Test
-    public void testLogExponentialDistribution() {
-        assertEquals(Math.log(Distributions.exponentialDistribution(5, 6)),
-                Distributions.logExponentialDistribution(5, 6), DELTA);
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
+    @Override
+    public String toString() {
+        return "Point [x=" + x + ", y=" + y + "]";
+    }
 }

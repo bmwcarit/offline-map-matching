@@ -15,23 +15,31 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching.map_matcher;
+package com.bmw.offline_map_matching.types;
 
-
+import java.util.Date;
 
 /**
- * Defines temporal metrics between location measurements.
- *
- * @param <O> location measurement type, which corresponds to the HMM observation.
+ * Example type for location coordinates.
  */
-public interface TemporalMetrics<O> {
+public class GpsMeasurement {
 
-    /**
-     * Returns the time difference in seconds between the specified location measurements.
-     * The time difference is positive if m2 is later than m1 and negative if m1 is later than m2.
-     *
-     * This is needed to compute the normalized transition metric defined in
-     * {@link MapMatchingHmmProbabilities#normalizedTransitionMetric(Object, Object)}.
-     */
-    public double timeDifference(O m1, O m2);
+    public final Date time;
+    
+    public Point position;
+
+    public GpsMeasurement(Date time, Point position) {
+        this.time = time;
+        this.position = position;
+    }
+
+    public GpsMeasurement(Date time, double lon, double lat) {
+        this(time, new Point(lon, lat));
+    }
+
+    @Override
+    public String toString() {
+        return "GpsMeasurement [time=" + time + ", position=" + position + "]";
+    }
+
 }
