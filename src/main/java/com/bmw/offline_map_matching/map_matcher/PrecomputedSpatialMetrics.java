@@ -20,8 +20,6 @@ package com.bmw.offline_map_matching.map_matcher;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.bmw.hmm.TimeStep;
-
 /**
  * Stores precomputed {@link SpatialMetrics}.
  *

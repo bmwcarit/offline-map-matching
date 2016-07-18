@@ -29,15 +29,14 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.bmw.hmm_lib.MostLikelySequence;
+import com.bmw.hmm_lib.TimeStep;
 import com.bmw.offline_map_matching.default_types.DefaultTemporalMetrics;
 import com.bmw.offline_map_matching.default_types.EuclideanSpatialMetrics;
 import com.bmw.offline_map_matching.default_types.GpsMeasurement;
 import com.bmw.offline_map_matching.default_types.RoadPosition;
 import com.bmw.offline_map_matching.map_matcher.OfflineMapMatcher;
 import com.bmw.offline_map_matching.map_matcher.PrecomputedSpatialMetrics;
-
-import de.bmw.hmm.MostLikelySequence;
-import de.bmw.hmm.TimeStep;
 
 public class OfflineMapMatcherTest {
 

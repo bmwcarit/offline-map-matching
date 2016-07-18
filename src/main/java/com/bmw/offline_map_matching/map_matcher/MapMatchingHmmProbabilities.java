@@ -21,10 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bmw.hmm_lib.HmmProbabilities;
+import com.bmw.hmm_lib.TimeStep;
 import com.bmw.offline_map_matching.default_types.RoadPosition;
-
-import de.bmw.hmm.HmmProbabilities;
-import de.bmw.hmm.TimeStep;
 
 /**
  * Based on Newson, Paul, and John Krumm. "Hidden Markov map matching through noise and sparseness."
@@ -88,7 +87,8 @@ public class MapMatchingHmmProbabilities<S, O> implements HmmProbabilities<S, O>
      * Returns the logarithmic transition probability density.
      */
     @Override
-    public double transitionLogProbability(S sourcePosition, S targetPosition) {
+    public double transitionLogProbability(S sourcePosition, O sourceMeasurement,
+    		S targetPosition, O targetMeasurement) {
         Double transitionMetric = normalizedTransitionMetric(sourcePosition, targetPosition);
         if (transitionMetric == null) {
             return Double.NEGATIVE_INFINITY;

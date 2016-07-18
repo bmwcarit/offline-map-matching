@@ -19,9 +19,9 @@ package com.bmw.offline_map_matching.map_matcher;
 
 import java.util.List;
 
-import de.bmw.hmm.Hmm;
-import de.bmw.hmm.MostLikelySequence;
-import de.bmw.hmm.TimeStep;
+import com.bmw.hmm_lib.Hmm;
+import com.bmw.hmm_lib.MostLikelySequence;
+import com.bmw.hmm_lib.TimeStep;
 
 public class OfflineMapMatcher {
 
