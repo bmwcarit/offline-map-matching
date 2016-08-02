@@ -60,7 +60,7 @@ public class HmmProbabilities<S, O> {
      * @param distance Absolute distance [m] between GPS measurement and map matching candidate.
      */
     public double emissionLogProbability(double distance) {
-        return Math.log(Distributions.normalDistribution(sigma, distance));
+        return Distributions.logNormalDistribution(sigma, distance);
     }
 
     /**

@@ -28,6 +28,12 @@ public class DistributionsTest {
     private static double DELTA = 1e-8;
 
     @Test
+    public void testLogNormalDistribution() {
+        assertEquals(Math.log(Distributions.normalDistribution(5, 6)),
+                Distributions.logNormalDistribution(5, 6), DELTA);
+    }
+    
+    @Test
     public void testLogExponentialDistribution() {
         assertEquals(Math.log(Distributions.exponentialDistribution(5, 6)),
                 Distributions.logExponentialDistribution(5, 6), DELTA);
