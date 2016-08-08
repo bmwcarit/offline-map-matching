@@ -44,11 +44,11 @@ public class HmmProbabilities<S, O> {
         /*
          * Sigma taken from Newson&Krumm.
          * Beta empirically computed from the Microsoft ground truth data for shortest route
-         * lengths and 60 s sampling interval but also works for other sampling intervals.  
+         * lengths and 60 s sampling interval but also works for other sampling intervals.
          */
         this(4.07, 0.00959442);
     }
-    
+
     public HmmProbabilities(double sigma, double beta) {
         this.sigma = sigma;
         this.beta = beta;
@@ -56,7 +56,7 @@ public class HmmProbabilities<S, O> {
 
     /**
      * Returns the logarithmic emission probability density.
-     * 
+     *
      * @param distance Absolute distance [m] between GPS measurement and map matching candidate.
      */
     public double emissionLogProbability(double distance) {
@@ -64,29 +64,29 @@ public class HmmProbabilities<S, O> {
     }
 
     /**
-     * Returns the logarithmic transition probability density for the given transition 
+     * Returns the logarithmic transition probability density for the given transition
      * parameters.
-     * 
-     * @param routeLength Length of the shortest route [m] between two consecutive map matching 
+     *
+     * @param routeLength Length of the shortest route [m] between two consecutive map matching
      * candidates.
      * @param linearDistance Linear distance [m] between two consecutive GPS measurements.
      * @param timeDiff time difference [s] between two consecutive GPS measurements.
      */
-    public double transitionLogProbability(double routeLength, double linearDistance, 
+    public double transitionLogProbability(double routeLength, double linearDistance,
             double timeDiff) {
         Double transitionMetric = normalizedTransitionMetric(routeLength, linearDistance, timeDiff);
         return Distributions.logExponentialDistribution(beta, transitionMetric);
     }
 
     /*
-     * Returns a transition metric for the transition between two consecutive map matching 
+     * Returns a transition metric for the transition between two consecutive map matching
      * candidates.
-     * 
+     *
      * In contrast to Newson & Krumm the absolute distance difference is divided by the quadratic
      * time difference to make the beta parameter of the exponential distribution independent of the
      * sampling interval.
      */
-    private double normalizedTransitionMetric(double routeLength, double linearDistance, 
+    private double normalizedTransitionMetric(double routeLength, double linearDistance,
             double timeDiff) {
         if (timeDiff < 0.0) {
             throw new IllegalStateException(

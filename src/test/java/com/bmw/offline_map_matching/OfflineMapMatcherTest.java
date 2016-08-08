@@ -46,26 +46,26 @@ import com.bmw.offline_map_matching.types.RoadPosition;
 /**
  * This class demonstrate how to use the hmm-lib for map matching. The methods
  * of this class can be used as a template to implement map matching for an actual map.
- * 
+ *
  * The test scenario is depicted in ./OfflineMapMatcherTest.png.
  * All road segments can be driven in both directions. The orientation of road segments
  * is needed to determine the fractions of a road positions.
  */
 public class OfflineMapMatcherTest {
 
-    private final HmmProbabilities<RoadPosition, GpsMeasurement> hmmProbabilities = 
+    private final HmmProbabilities<RoadPosition, GpsMeasurement> hmmProbabilities =
             new HmmProbabilities<>();
-    
-    private final static Map<GpsMeasurement, Collection<RoadPosition>> candidateMap = 
+
+    private final static Map<GpsMeasurement, Collection<RoadPosition>> candidateMap =
             new HashMap<>();
-    
+
     private final static Map<Transition<RoadPosition>, Double> routeLengths = new HashMap<>();
 
     private final static GpsMeasurement gps1 = new GpsMeasurement(seconds(0), 10, 10);
     private final static GpsMeasurement gps2 = new GpsMeasurement(seconds(1), 30, 20);
     private final static GpsMeasurement gps3 = new GpsMeasurement(seconds(2), 30, 40);
-    private final static GpsMeasurement gps4 = new GpsMeasurement(seconds(3), 10, 70);    
-    
+    private final static GpsMeasurement gps4 = new GpsMeasurement(seconds(3), 10, 70);
+
     private final static RoadPosition rp11 = new RoadPosition(1, 1.0 / 5.0, 20.0, 10.0);
     private final static RoadPosition rp12 = new RoadPosition(2, 1.0 / 5.0, 60.0, 10.0);
     private final static RoadPosition rp21 = new RoadPosition(1, 2.0 / 5.0, 20.0, 20.0);
@@ -75,19 +75,19 @@ public class OfflineMapMatcherTest {
     private final static RoadPosition rp33 = new RoadPosition(2, 5.0 / 6.0, 60.0, 40.0);
     private final static RoadPosition rp41 = new RoadPosition(4, 2.0 / 3.0, 20.0, 70.0);
     private final static RoadPosition rp42 = new RoadPosition(5, 2.0 / 3.0, 60.0, 70.0);
-    
+
     @BeforeClass
     public static void setUpClass() {
         candidateMap.put(gps1, Arrays.asList(rp11, rp12));
         candidateMap.put(gps2, Arrays.asList(rp21, rp22));
         candidateMap.put(gps3, Arrays.asList(rp31, rp32, rp33));
         candidateMap.put(gps4, Arrays.asList(rp41, rp42));
-        
+
         addRouteLength(rp11, rp21, 10.0);
         addRouteLength(rp11, rp22, 110.0);
         addRouteLength(rp12, rp21, 110.0);
         addRouteLength(rp12, rp22, 10.0);
-        
+
         addRouteLength(rp21, rp31, 20.0);
         addRouteLength(rp21, rp32, 40.0);
         addRouteLength(rp21, rp33, 80.0);
@@ -102,17 +102,17 @@ public class OfflineMapMatcherTest {
         addRouteLength(rp33, rp41, 70.0);
         addRouteLength(rp33, rp42, 30.0);
     }
-    
+
     private static Date seconds(int seconds) {
         Calendar c = new GregorianCalendar(2014, 1, 1);
         c.add(Calendar.SECOND, seconds);
         return c.getTime();
     }
-    
+
     private static void addRouteLength(RoadPosition from, RoadPosition to, double routeLength) {
         routeLengths.put(new Transition<RoadPosition>(from, to), routeLength);
     }
-    
+
     /*
      * Returns the Cartesian distance between two points.
      * For real map matching applications, one would compute the great circle distance between
@@ -130,17 +130,17 @@ public class OfflineMapMatcherTest {
     private Collection<RoadPosition> computeCandidates(GpsMeasurement gpsMeasurement) {
         return candidateMap.get(gpsMeasurement);
     }
-    
+
     private void computeEmissionProbabilities(
             TimeStep<RoadPosition, GpsMeasurement, RoadPath> timeStep) {
         for (RoadPosition candidate : timeStep.candidates) {
-            final double distance = 
+            final double distance =
                     computeDistance(candidate.position, timeStep.observation.position);
-            timeStep.addEmissionLogProbability(candidate, 
+            timeStep.addEmissionLogProbability(candidate,
                     hmmProbabilities.emissionLogProbability(distance));
         }
     }
-    
+
     private void computeTransitionProbabilities(
             TimeStep<RoadPosition, GpsMeasurement, RoadPath> prevTimeStep,
             TimeStep<RoadPosition, GpsMeasurement, RoadPath> timeStep) {
@@ -152,51 +152,51 @@ public class OfflineMapMatcherTest {
                 // multi-target router.
                 final double routeLength = routeLengths.get(new Transition<RoadPosition>(from, to));
                 timeStep.addRoadPath(from, to, new RoadPath(from, to));
-                
+
                 final double linearDistance = computeDistance(from.position, to.position);
-                final double timeDiff = (timeStep.observation.time.getTime() - 
+                final double timeDiff = (timeStep.observation.time.getTime() -
                         prevTimeStep.observation.time.getTime()) / 1000.0;
-                
+
                 final double transitionLogProbability = hmmProbabilities.transitionLogProbability(
                         routeLength, linearDistance, timeDiff);
                 timeStep.addTransitionLogProbability(from, to, transitionLogProbability);
             }
         }
     }
-    
+
     @Test
     public void testMapMatching() {
         final List<GpsMeasurement> gpsMeasurements = Arrays.asList(gps1, gps2, gps3, gps4);
-       
-        ViterbiAlgorithm<RoadPosition, GpsMeasurement, RoadPath> viterbi = 
+
+        ViterbiAlgorithm<RoadPosition, GpsMeasurement, RoadPath> viterbi =
                 new ViterbiAlgorithm<>();
         TimeStep<RoadPosition, GpsMeasurement, RoadPath> prevTimeStep = null;
         for (GpsMeasurement gpsMeasurement : gpsMeasurements) {
             final Collection<RoadPosition> candidates = computeCandidates(gpsMeasurement);
-            final TimeStep<RoadPosition, GpsMeasurement, RoadPath> timeStep = 
+            final TimeStep<RoadPosition, GpsMeasurement, RoadPath> timeStep =
                     new TimeStep<>(gpsMeasurement, candidates);
             computeEmissionProbabilities(timeStep);
             if (prevTimeStep == null) {
-                viterbi.startWithInitialObservation(timeStep.observation, timeStep.candidates, 
+                viterbi.startWithInitialObservation(timeStep.observation, timeStep.candidates,
                         timeStep.emissionLogProbabilities);
             } else {
                 computeTransitionProbabilities(prevTimeStep, timeStep);
-                viterbi.nextStep(timeStep.observation, timeStep.candidates, 
+                viterbi.nextStep(timeStep.observation, timeStep.candidates,
                         timeStep.emissionLogProbabilities, timeStep.transitionLogProbabilities,
                         timeStep.roadPaths);
             }
             prevTimeStep = timeStep;
         }
-        
-        List<SequenceState<RoadPosition, GpsMeasurement, RoadPath>> roadPositions = 
+
+        List<SequenceState<RoadPosition, GpsMeasurement, RoadPath>> roadPositions =
                 viterbi.computeMostLikelySequence();
-        
+
         assertFalse(viterbi.isBroken());
         List<SequenceState<RoadPosition, GpsMeasurement, RoadPath>> expected = new ArrayList<>();
         expected.add(new SequenceState<>(rp11, gps1, (RoadPath) null));
         expected.add(new SequenceState<>(rp21, gps2, new RoadPath(rp11, rp21)));
         expected.add(new SequenceState<>(rp31, gps3, new RoadPath(rp21, rp31)));
-        expected.add(new SequenceState<>(rp41, gps4, new RoadPath(rp31, rp41)));        
+        expected.add(new SequenceState<>(rp41, gps4, new RoadPath(rp31, rp41)));
         assertEquals(expected, roadPositions);
     }
 

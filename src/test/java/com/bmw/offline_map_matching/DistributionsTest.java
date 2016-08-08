@@ -32,7 +32,7 @@ public class DistributionsTest {
         assertEquals(Math.log(Distributions.normalDistribution(5, 6)),
                 Distributions.logNormalDistribution(5, 6), DELTA);
     }
-    
+
     @Test
     public void testLogExponentialDistribution() {
         assertEquals(Math.log(Distributions.exponentialDistribution(5, 6)),
