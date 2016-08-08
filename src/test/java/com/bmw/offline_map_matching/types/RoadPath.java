@@ -24,43 +24,43 @@ import java.util.Objects;
  */
 public class RoadPath {
 
-	// The following members are used to check whether the correct road paths are retrieved
-	// from the most likely sequence.
-	
-	public final RoadPosition from;
-	public final RoadPosition to;
-	
-	public RoadPath(RoadPosition from, RoadPosition to) {
-		this.from = from;
-		this.to = to;
-	}
+    // The following members are used to check whether the correct road paths are retrieved
+    // from the most likely sequence.
+    
+    public final RoadPosition from;
+    public final RoadPosition to;
+    
+    public RoadPath(RoadPosition from, RoadPosition to) {
+        this.from = from;
+        this.to = to;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(from, to);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RoadPath other = (RoadPath) obj;
-		if (from == null) {
-			if (other.from != null)
-				return false;
-		} else if (!from.equals(other.from))
-			return false;
-		if (to == null) {
-			if (other.to != null)
-				return false;
-		} else if (!to.equals(other.to))
-			return false;
-		return true;
-	}
-	
-	
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RoadPath other = (RoadPath) obj;
+        if (from == null) {
+            if (other.from != null)
+                return false;
+        } else if (!from.equals(other.from))
+            return false;
+        if (to == null) {
+            if (other.to != null)
+                return false;
+        } else if (!to.equals(other.to))
+            return false;
+        return true;
+    }
+    
+    
 }

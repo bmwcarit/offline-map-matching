@@ -41,20 +41,20 @@ public class HmmProbabilities<S, O> {
     private final double beta;
 
     public HmmProbabilities() {
-    	/*
-    	 * Sigma taken from Newson&Krumm.
-    	 * Beta empirically computed from the Microsoft ground truth data for shortest route
-    	 * lengths and 60 s sampling interval but also works for other sampling intervals.  
-    	 */
-    	this(4.07, 0.00959442);
+        /*
+         * Sigma taken from Newson&Krumm.
+         * Beta empirically computed from the Microsoft ground truth data for shortest route
+         * lengths and 60 s sampling interval but also works for other sampling intervals.  
+         */
+        this(4.07, 0.00959442);
     }
     
     public HmmProbabilities(double sigma, double beta) {
-		this.sigma = sigma;
-		this.beta = beta;
-	}
+        this.sigma = sigma;
+        this.beta = beta;
+    }
 
-	/**
+    /**
      * Returns the logarithmic emission probability density.
      * 
      * @param distance Absolute distance [m] between GPS measurement and map matching candidate.
@@ -73,7 +73,7 @@ public class HmmProbabilities<S, O> {
      * @param timeDiff time difference [s] between two consecutive GPS measurements.
      */
     public double transitionLogProbability(double routeLength, double linearDistance, 
-    		double timeDiff) {
+            double timeDiff) {
         Double transitionMetric = normalizedTransitionMetric(routeLength, linearDistance, timeDiff);
         return Distributions.logExponentialDistribution(beta, transitionMetric);
     }
@@ -87,7 +87,7 @@ public class HmmProbabilities<S, O> {
      * sampling interval.
      */
     private double normalizedTransitionMetric(double routeLength, double linearDistance, 
-    		double timeDiff) {
+            double timeDiff) {
         if (timeDiff < 0.0) {
             throw new IllegalStateException(
                     "Time difference between subsequent location measurements must be >= 0.");
