@@ -33,9 +33,9 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.bmw.hmm_lib.SequenceState;
-import com.bmw.hmm_lib.Transition;
-import com.bmw.hmm_lib.ViterbiAlgorithm;
+import com.bmw.hmm.SequenceState;
+import com.bmw.hmm.Transition;
+import com.bmw.hmm.ViterbiAlgorithm;
 import com.bmw.offline_map_matching.HmmProbabilities;
 import com.bmw.offline_map_matching.TimeStep;
 import com.bmw.offline_map_matching.types.GpsMeasurement;

@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.bmw.hmm_lib.Transition;
+import com.bmw.hmm.Transition;
 
 
 /**
