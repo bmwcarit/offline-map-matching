@@ -22,24 +22,15 @@ package com.bmw.offline_map_matching;
  * Based on Newson, Paul, and John Krumm. "Hidden Markov map matching through noise and sparseness."
  * Proceedings of the 17th ACM SIGSPATIAL International Conference on Advances in Geographic
  * Information Systems. ACM, 2009.
- *
- * @param <S> road position type, which corresponds to the HMM state.
- * @param <O> location measurement type, which corresponds to the HMM observation.
  */
-public class HmmProbabilities<S, O> {
+public class HmmProbabilities {
 
-    /**
-     * Standard deviation of the normal distribution [m] used for modeling the GPS error.
-     */
     private final double sigma;
-
-    /**
-     * Beta parameter of the exponential distribution for modeling transition probabilities.
-     *
-     * @see HmmProbabilities#normalizedTransitionMetric(double, double, double)
-     */
     private final double beta;
 
+    /**
+     * Sets default values for sigma and beta.
+     */
     public HmmProbabilities() {
         /*
          * Sigma taken from Newson&Krumm.
@@ -49,6 +40,12 @@ public class HmmProbabilities<S, O> {
         this(4.07, 0.00959442);
     }
 
+    /**
+     * @param sigma standard deviation of the normal distribution [m] used for modeling the
+     * GPS error
+     * @param beta beta parameter of the exponential distribution for 1 s sampling interval, used
+     * for modeling transition probabilities
+     */
     public HmmProbabilities(double sigma, double beta) {
         this.sigma = sigma;
         this.beta = beta;
@@ -78,7 +75,7 @@ public class HmmProbabilities<S, O> {
         return Distributions.logExponentialDistribution(beta, transitionMetric);
     }
 
-    /*
+    /**
      * Returns a transition metric for the transition between two consecutive map matching
      * candidates.
      *

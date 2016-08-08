@@ -53,8 +53,7 @@ import com.bmw.offline_map_matching.types.RoadPosition;
  */
 public class OfflineMapMatcherTest {
 
-    private final HmmProbabilities<RoadPosition, GpsMeasurement> hmmProbabilities =
-            new HmmProbabilities<>();
+    private final HmmProbabilities hmmProbabilities = new HmmProbabilities();
 
     private final static Map<GpsMeasurement, Collection<RoadPosition>> candidateMap =
             new HashMap<>();

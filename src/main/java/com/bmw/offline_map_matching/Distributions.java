@@ -23,6 +23,10 @@ import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
+
+/**
+ * Implements various probability distributions.
+ */
 public class Distributions {
 
     static double normalDistribution(double sigma, double x) {
@@ -37,6 +41,9 @@ public class Distributions {
         return Math.log(1.0 / (sqrt(2.0 * PI) * sigma)) + (-0.5 * pow(x / sigma, 2));
     }
 
+    /**
+     * @param beta =1/lambda with lambda being the standard exponential distribution rate parameter
+     */
     static double exponentialDistribution(double beta, double x) {
         return 1.0 / beta * exp(-x / beta);
     }
@@ -44,6 +51,8 @@ public class Distributions {
     /**
      * Use this function instead of Math.log(exponentialDistribution(beta, x)) to avoid an
      * arithmetic underflow for very small probabilities.
+     *
+     * @param beta =1/lambda with lambda being the standard exponential distribution rate parameter
      */
     static double logExponentialDistribution(double beta, double x) {
         return log(1.0 / beta) - (x / beta);
