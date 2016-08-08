@@ -15,23 +15,31 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching.types;
+package com.bmw.mapmatchingutils.types;
+
+import java.util.Date;
 
 /**
- * Represents a spatial point.
+ * Example type for location coordinates.
  */
-public class Point {
+public class GpsMeasurement {
 
-    final public double x;
-    final public double y;
+    public final Date time;
+    
+    public Point position;
 
-    public Point(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public GpsMeasurement(Date time, Point position) {
+        this.time = time;
+        this.position = position;
+    }
+
+    public GpsMeasurement(Date time, double lon, double lat) {
+        this(time, new Point(lon, lat));
     }
 
     @Override
     public String toString() {
-        return "Point [x=" + x + ", y=" + y + "]";
+        return "GpsMeasurement [time=" + time + ", position=" + position + "]";
     }
+
 }

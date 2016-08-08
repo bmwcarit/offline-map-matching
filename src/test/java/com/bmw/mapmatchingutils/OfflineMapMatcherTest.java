@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching;
+package com.bmw.mapmatchingutils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,12 +36,12 @@ import org.junit.Test;
 import com.bmw.hmm.SequenceState;
 import com.bmw.hmm.Transition;
 import com.bmw.hmm.ViterbiAlgorithm;
-import com.bmw.offline_map_matching.HmmProbabilities;
-import com.bmw.offline_map_matching.TimeStep;
-import com.bmw.offline_map_matching.types.GpsMeasurement;
-import com.bmw.offline_map_matching.types.Point;
-import com.bmw.offline_map_matching.types.RoadPath;
-import com.bmw.offline_map_matching.types.RoadPosition;
+import com.bmw.mapmatchingutils.HmmProbabilities;
+import com.bmw.mapmatchingutils.TimeStep;
+import com.bmw.mapmatchingutils.types.GpsMeasurement;
+import com.bmw.mapmatchingutils.types.Point;
+import com.bmw.mapmatchingutils.types.RoadPath;
+import com.bmw.mapmatchingutils.types.RoadPosition;
 
 /**
  * This class demonstrate how to use the hmm-lib for map matching. The methods

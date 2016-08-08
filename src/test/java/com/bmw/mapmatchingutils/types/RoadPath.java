@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching.types;
+package com.bmw.mapmatchingutils.types;
 
 import java.util.Objects;
 

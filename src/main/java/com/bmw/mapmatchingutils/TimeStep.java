@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching;
+package com.bmw.mapmatchingutils;
 
 import java.util.Collection;
 import java.util.HashMap;

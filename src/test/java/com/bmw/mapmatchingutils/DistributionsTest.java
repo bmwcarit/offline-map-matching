@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package com.bmw.offline_map_matching;
+package com.bmw.mapmatchingutils;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.bmw.offline_map_matching.Distributions;
+import com.bmw.mapmatchingutils.Distributions;
 
 public class DistributionsTest {
 
