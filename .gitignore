@@ -4,3 +4,6 @@ target/
 /.classpath
 /.project
 /.cache
+/.idea
+*.iml
+*~
