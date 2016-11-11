@@ -17,31 +17,20 @@
 
 package com.bmw.mapmatchingutils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.bmw.hmm.SequenceState;
 import com.bmw.hmm.Transition;
 import com.bmw.hmm.ViterbiAlgorithm;
-import com.bmw.mapmatchingutils.HmmProbabilities;
-import com.bmw.mapmatchingutils.TimeStep;
 import com.bmw.mapmatchingutils.types.GpsMeasurement;
 import com.bmw.mapmatchingutils.types.Point;
 import com.bmw.mapmatchingutils.types.RoadPath;
 import com.bmw.mapmatchingutils.types.RoadPosition;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * This class demonstrate how to use the hmm-lib for map matching. The methods
@@ -143,18 +132,19 @@ public class OfflineMapMatcherTest {
     private void computeTransitionProbabilities(
             TimeStep<RoadPosition, GpsMeasurement, RoadPath> prevTimeStep,
             TimeStep<RoadPosition, GpsMeasurement, RoadPath> timeStep) {
+        final double linearDistance = computeDistance(prevTimeStep.observation.position,
+                timeStep.observation.position);
+        final double timeDiff = (timeStep.observation.time.getTime() -
+                prevTimeStep.observation.time.getTime()) / 1000.0;
+
         for (RoadPosition from : prevTimeStep.candidates) {
             for (RoadPosition to : timeStep.candidates) {
 
                 // For real map matching applications, route lengths and road paths would be
                 // computed using a router. The most efficient way is to use a single-source
                 // multi-target router.
-                final double routeLength = routeLengths.get(new Transition<RoadPosition>(from, to));
+                final double routeLength = routeLengths.get(new Transition<>(from, to));
                 timeStep.addRoadPath(from, to, new RoadPath(from, to));
-
-                final double linearDistance = computeDistance(from.position, to.position);
-                final double timeDiff = (timeStep.observation.time.getTime() -
-                        prevTimeStep.observation.time.getTime()) / 1000.0;
 
                 final double transitionLogProbability = hmmProbabilities.transitionLogProbability(
                         routeLength, linearDistance, timeDiff);
