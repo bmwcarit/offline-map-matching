@@ -70,7 +70,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
-      <version>4.11</version>
+      <version>4.13.1</version>
     </dependency>
     <dependency>
       <groupId>com.bmw.hmm</groupId>
